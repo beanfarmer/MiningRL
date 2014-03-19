@@ -2,7 +2,7 @@ var Game = {
 	display: null,
 	
 	init: function() {
-		this.display = new ROT.Display({width: 80, height: 25});
+		this.display = new ROT.Display({width: 80, height: 40, fontSize: 14});
 		document.body.appendChild(this.display.getContainer());
 		
 		this._generateCaves();	
@@ -10,13 +10,15 @@ var Game = {
 
 	_generateCaves: function() {
 		var w = 80;
-		var h = 25;
-		var map = new ROT.Map.Cellular(w, h);
+		var h = 40;
+		var map = new ROT.Map.Cellular(w, h, {
+			born: [5, 6, 7, 8],
+			survive: [2, 3, 4, 5]});
 		
-		map.randomize(0.5);
+		map.randomize(0.8);
 
-		for (var i=0; i < 4; i++) {
-			map.create(this.display.DEBUG);
+		for (var i=49; i >=0; i--) {
+			map.create(i ? null : this.display.DEBUG);
 		}
 	}
 
