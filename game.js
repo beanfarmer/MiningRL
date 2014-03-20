@@ -13,11 +13,9 @@ var Game = {
 	_generateCaves: function() {
 		var w = 80;
 		var h = 40;
-		var map = new ROT.Map.Cellular(w, h, {
-			born: [5, 6, 7, 8],
-			survive: [2, 3, 4, 5]});
+		var map = new ROT.Map.Cellular(w, h);
 		
-		map.randomize(0.8);
+		map.randomize(0.5);
 	
 		var cellCallback = function(x, y, value) {
 			var key;
@@ -31,10 +29,11 @@ var Game = {
 			this.map[key] = ".";
 		}
 
-		for (var i=49; i >=0; i--) {
-			map.create(i ? null : cellCallback.bind(this));
+		for (var i=0; i < 4; i++) {
+			map.create(cellCallback.bind(this));
 		}
 		
+	
 		this._drawWholeMap();
 	},
 
@@ -46,7 +45,7 @@ var Game = {
 			this.display.draw(x, y, this.map[key]);
 		}
 
-	}
+	},
 	
 
 };
