@@ -112,7 +112,7 @@ Player.prototype.handleEvent = function(e) {
 	var newX = this._x + dir[0];
 	var newY = this._y + dir[1];
 	var newKey = newX + "," + newY;
-	if (newKey in Game.wallCells) { return; }
+	if (Game.wallCells.indexOf(newKey) != -1) { return; }
 
 	Game.display.draw(this._x, this._y, Game.map[this._x+","+this._y]);
 	this._x = newX;
