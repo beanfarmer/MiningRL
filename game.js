@@ -74,6 +74,8 @@ var Game = {
 		for(var i = 0; i <10; i++) {
 			var index = Math.floor(ROT.RNG.getUniform() * wallCells.length);
 			var key = wallCells.splice(index, 1)[0];
+			var mine = wallCells.pop(key);
+			this.floorCells.push(mine);
 			this.map[key] = "^";
 		}
 	},
