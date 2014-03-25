@@ -5,6 +5,9 @@ var Game = {
 	engine: null,
 	wallCells: [],
 	floorCells: [],
+	gemCells: [],
+	caveInCells: [],
+	score: null,
 
 	init: function() {
 		this.display = new ROT.Display({width: 80, height: 40, fontSize: 14});
@@ -77,6 +80,7 @@ var Game = {
 			var mine = wallCells.pop(key);
 			this.floorCells.push(mine);
 			this.map[key] = "^";
+			if (i == 2 || i == 4) { this.gemCells.push(key); }
 		}
 	},
 	
@@ -107,6 +111,11 @@ Player.prototype.handleEvent = function(e) {
 
 	var code = e.keyCode;
 
+	if (code == 13 || code == 32) {
+		this._mineCell();
+		return;
+	}
+
 	if (!(code in keyMap)) { return; } // It's not one of the numpad directions, ignore it.
 	
 	// Is the direction valid? (aka not walking into a wall)
@@ -115,6 +124,7 @@ Player.prototype.handleEvent = function(e) {
 	var newY = this._y + dir[1];
 	var newKey = newX + "," + newY;
 	if (Game.wallCells.indexOf(newKey) != -1) { return; }
+	if (!(newKey in Game.map)) { return; }
 
 	Game.display.draw(this._x, this._y, Game.map[this._x+","+this._y]);
 	this._x = newX;
@@ -122,6 +132,15 @@ Player.prototype.handleEvent = function(e) {
 	this._draw();
 	window.removeEventListener("keydown", this);
 	Game.engine.unlock();
+}
+
+Player.prototype._mineCell = function() {
+	var key = this._x + "," + this._y;
+	if (key in Game.gemCells) {
+		alert("You found a gemstone!");
+	} else {
+		alert("You find nothing but dirt and stone.");
+	}
 }
 
 Player.prototype._draw = function() {
