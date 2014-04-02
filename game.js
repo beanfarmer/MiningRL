@@ -12,7 +12,7 @@ var Game = {
 	init: function() {
 		this.display = new ROT.Display({width: 80, height: 40, fontSize: 14});
 		document.body.appendChild(this.display.getContainer());
-		
+		score = 0;
 		this._generateCaves();	
 
 		var scheduler = new ROT.Scheduler.Simple();
@@ -137,7 +137,9 @@ Player.prototype.handleEvent = function(e) {
 Player.prototype._mineCell = function() {
 	var key = this._x + "," + this._y;
 	if (Game.gemCells.indexOf(key) != -1) {
-		alert("You found a gemstone!");
+		Game.score += 10;
+		Game.gemCells.pop(key);
+		alert("You found a gemstone! Score: " + Game.score);
 	} else {
 		alert("You find nothing but dirt and stone.");
 	}
