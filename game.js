@@ -81,6 +81,7 @@ var Game = {
 			this.floorCells.push(mine);
 			this.map[key] = "^";
 			if (i == 2 || i == 4) { this.gemCells.push(key); }
+			if (i == 5 || i == 7) { this.caveInCells.push(key); }
 		}
 	},
 	
@@ -140,6 +141,15 @@ Player.prototype._mineCell = function() {
 		Game.score += 10;
 		Game.gemCells.pop(key);
 		alert("You found a gemstone! Score: " + Game.score);
+		if (Game.gemCells.length <= 0) { 
+			alert("You have found all the gemstones! Well done!"); 
+			Game.engine.lock();
+			window.removeEventListener("keydown", this);
+		}
+	} else if (Game.caveInCells.indexOf(key) != -1) {
+		alert("You triggered a cave in! You tried to run away, but unfortunately you got crushed under the falling rocks. Your score is: " + Game.score);
+		Game.engine.lock();
+		window.removeEventListener("keydown", this);
 	} else {
 		alert("You find nothing but dirt and stone.");
 	}
