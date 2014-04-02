@@ -136,7 +136,7 @@ Player.prototype.handleEvent = function(e) {
 
 Player.prototype._mineCell = function() {
 	var key = this._x + "," + this._y;
-	if (key in Game.gemCells) {
+	if (Game.gemCells.indexOf(key) != -1) {
 		alert("You found a gemstone!");
 	} else {
 		alert("You find nothing but dirt and stone.");
