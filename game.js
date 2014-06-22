@@ -1,6 +1,6 @@
 var Game = {
 	display: null,
-	map: {},	
+	map: {},
 	player: null,
 	engine: null,
 	wallCells: [],
@@ -13,7 +13,7 @@ var Game = {
 		this.display = new ROT.Display({width: 80, height: 40, fontSize: 14});
 		document.body.appendChild(this.display.getContainer());
 		score = 0;
-		this._generateCaves();	
+		this._generateCaves();
 
 		var scheduler = new ROT.Scheduler.Simple();
 		scheduler.add(this.player, true);
@@ -27,12 +27,12 @@ var Game = {
 		var map = new ROT.Map.Cellular(w, h, {
 			born: [5, 6, 7, 8],
 			survive: [2, 3, 4, 5]});
-		
+
 		map.randomize(0.8);
-	
+
 		var cellCallback = function(x, y, value) {
 			var key;
-						
+
 			if (value) {	/* eg, if this point is a wall. */
 				key = x+","+y;
 				this.wallCells.push(key);
@@ -47,9 +47,9 @@ var Game = {
 		for (var i=49; i >= 0; i--) {
 			map.create(i ? null : cellCallback.bind(this));
 		}
-		
+
 		this._generateMinePoints(this.wallCells);
-	
+
 		this._drawWholeMap();
 		this._createPlayer(this.floorCells);
 	},
@@ -84,7 +84,7 @@ var Game = {
 			if (i == 5 || i == 7) { this.caveInCells.push(key); }
 		}
 	},
-	
+
 
 };
 
@@ -118,7 +118,7 @@ Player.prototype.handleEvent = function(e) {
 	}
 
 	if (!(code in keyMap)) { return; } // It's not one of the numpad directions, ignore it.
-	
+
 	// Is the direction valid? (aka not walking into a wall)
 	var dir = ROT.DIRS[8][keyMap[code]];
 	var newX = this._x + dir[0];
@@ -141,17 +141,32 @@ Player.prototype._mineCell = function() {
 		Game.score += 10;
 		Game.gemCells.pop(key);
 		alert("You found a gemstone! Score: " + Game.score);
-		if (Game.gemCells.length <= 0) { 
-			alert("You have found all the gemstones! Well done!"); 
+		if (Game.gemCells.length <= 0) {
+			alert("You have found all the gemstones! Well done!");
 			Game.engine.lock();
 			window.removeEventListener("keydown", this);
 		}
 	} else if (Game.caveInCells.indexOf(key) != -1) {
-		alert("You triggered a cave in! You tried to run away, but unfortunately you got crushed under the falling rocks. Your score is: " + Game.score);
-		Game.engine.lock();
-		window.removeEventListener("keydown", this);
+			alert("You triggered a cave in! You tried to run away, but unfortunately you got crushed under the falling rocks. Your score is: " + Game.score);
+			Game.engine.lock();
+			window.removeEventListener("keydown", this);
 	} else {
-		alert("You find nothing but dirt and stone.");
+		var rand = Math.floor((Math.random() * 3) + 1);
+		switch(rand){
+		case 1:
+				alert("You find nothing but dirt and stone.");
+				break;
+
+		case 2:
+				alert("You find nothing but dirt.");
+				break;
+
+		case 3:
+				alert("You find nothing but stone.");
+				break;
+		}
+
+
 	}
 }
 
